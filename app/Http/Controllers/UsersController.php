@@ -45,7 +45,7 @@ class UsersController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(User $user){
-        $this->authorize('update',$user);
+//        $this->authorize('update',$user);
         $statuses = $user->statuses()
             ->orderBy('created_at','desc')
             ->paginate(10);
