@@ -30,8 +30,6 @@ class UsersController extends Controller
     }
 
 
-
-
     /**
      * 申请账号界面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
