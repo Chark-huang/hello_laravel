@@ -54,6 +54,55 @@ class User extends Authenticatable
         return $this->hasMany(Status::class);
     }
 
+    /**
+     * 获取粉丝列表
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function followers(){
+        return $this->belongsToMany(User::class,'followers','user_id','follower_id');
+    }
+
+    /**
+     * 获取用户的关注人
+     */
+    public function followings(){
+        return $this->belongsToMany(User::class,'followers','follower_id','user_id');
+    }
+
+
+    /**
+     * 关注人
+     * @param $user_ids
+     */
+    public function follow($user_ids){
+        if (!is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids,false);
+    }
+
+    /**
+     * 取消关注
+     * @param $user_ids
+     */
+    public function unfollow($user_ids){
+        if (!is_array($user_ids)){
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+
+    /**
+     * 判断是否关注
+     * @param $user_id
+     * @return mixed
+     */
+    public function isFollowing($user_id){
+        return $this->followings()->contains($user_id);
+    }
+    
+
+
 
     public function gravatar($size = '100'){
         $hash = md5(strtolower(trim($this->attributes['email'])));
